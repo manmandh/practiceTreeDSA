@@ -63,7 +63,37 @@ void insertNode(node &root, int x){
     }
 }
 
-void deleteNode(node &root, int data){
+void findTheDeepestNode(node &root, node &tmp){
+    if(root->left){
+        findTheDeepestNode(root, root->left );
+    }else{
+        root->data = tmp->data;
+        tmp = tmp->right;
+    }
+}
+
+void updateNode(node &root){
+    if(!root) {
+        return;
+    }
+    else {
+        cout << "Enter value need to update: ";
+        char oldData;
+        cin >> oldData;
+        cout << "Enter new value: ";
+        char newData;
+        cin >> newData;
+        if(root->data == oldData) {
+            root->data = newData;
+        }
+        else {
+            updateNode(root->left);
+            updateNode(root->right);
+        }
+    }
+}
+
+void deleteNode(node &root, char data){
     if(root==NULL){
         return;
     }else{
@@ -72,12 +102,14 @@ void deleteNode(node &root, int data){
         }else if(data>root->data){
             deleteNode(root->right, data);
         }else{
-            // data->root=data;
             node x = root;
             if(root->left==NULL){
                 root = root->right;
             }else if(root->right==NULL){
                 root = root->left;
+            }else {
+                node extra = createNode('c');
+                findTheDeepestNode(extra, root->right);
             }
             delete x;
         }
